@@ -57,6 +57,9 @@ void vnd_load_conf(const char *p_path);
 #if (HW_END_WITH_HCI_RESET == TRUE)
 void hw_epilog_process(void);
 #endif
+#if (USE_AXI_BRIDGE_LOCK == TRUE)
+void axi_bridge_lock(int locked);
+#endif
 
 #if (BRCM_A2DP_OFFLOAD == TRUE)
 void brcm_vnd_a2dp_init(bt_vendor_callbacks_t *callback);
@@ -151,6 +154,9 @@ static int op(bt_vendor_opcode_t opcode, void *param)
                 upio_set_bluetooth_power(UPIO_BT_POWER_OFF);
                 if (*state == BT_VND_PWR_ON)
                 {
+#if (USE_AXI_BRIDGE_LOCK == TRUE)
+                    axi_bridge_lock(1);
+#endif
                     ALOGW("NOTE: BT_VND_PWR_ON now forces power-off first");
                     upio_set_bluetooth_power(UPIO_BT_POWER_ON);
                 } else {
