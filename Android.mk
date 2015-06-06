@@ -59,6 +59,11 @@ LOCAL_MODULE_CLASS := SHARED_LIBRARIES
 LOCAL_MODULE_OWNER := broadcom
 LOCAL_PROPRIETARY_MODULE := true
 
+ifeq ($(BOARD_HAVE_SAMSUNG_BLUETOOTH),true)
+    LOCAL_CFLAGS += -DSAMSUNG_BLUETOOTH
+    LOCAL_C_INCLUDES += hardware/samsung/macloader/include
+endif
+
 include $(LOCAL_PATH)/vnd_buildcfg.mk
 
 include $(BUILD_SHARED_LIBRARY)

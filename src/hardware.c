@@ -49,6 +49,9 @@
 #include "userial.h"
 #include "userial_vendor.h"
 #include "upio.h"
+#ifdef SAMSUNG_BLUETOOTH
+#include <samsung_macloader.h>
+#endif
 
 /******************************************************************************
 **  Constants & Macros
@@ -431,6 +434,54 @@ static int hw_strncmp (const char *p_str1, const char *p_str2, const int len)
     return 0;
 }
 
+#ifdef SAMSUNG_BLUETOOTH
+/*******************************************************************************
+**
+** Function         hw_samsung_bluetooth_type
+**
+** Description      Returns the type of bluetooth chip present in samsung
+**                  device.
+**
+** Returns          Returns char* (bluetooth type)
+**
+*******************************************************************************/
+static const char *hw_samsung_bluetooth_type()
+{
+    char buf[10];
+    int fd;
+    ssize_t nread;
+
+    fd = open(CID_PATH, O_RDONLY);
+    if (fd < 0) {
+        ALOGE("Couldn't open file %s for reading", CID_PATH);
+        return NULL;
+    }
+
+    nread = read(fd, buf, sizeof(buf));
+    close(fd);
+    if (nread <= 0) {
+        return NULL;
+    }
+
+    if (strncmp(buf, "murata", 6) == 0)
+        return "murata";
+
+    if (strncmp(buf, "semcove", 7) == 0)
+        return "semcove";
+
+    if (strncmp(buf, "semcosh", 7) == 0)
+        return "semcosh";
+
+    if (strncmp(buf, "semco", 5) == 0)
+        return "semco";
+
+    if (strncmp(buf, "wisol", 5) == 0)
+        return "wisol";
+
+    return NULL;
+}
+#endif
+
 /*******************************************************************************
 **
 ** Function         hw_config_findpatch
@@ -476,9 +527,28 @@ static uint8_t hw_config_findpatch(char *p_chip_id_str)
         while ((dp = readdir(dirp)) != NULL)
         {
             /* Check if filename starts with chip-id name */
-            if ((hw_strncmp(dp->d_name, p_chip_id_str, strlen(p_chip_id_str)) \
-                ) == 0)
+            int cmp;
+
+            cmp = hw_strncmp(dp->d_name, p_chip_id_str, strlen(p_chip_id_str));
+            if (cmp == 0)
             {
+#ifdef SAMSUNG_BLUETOOTH
+                const char *type = hw_samsung_bluetooth_type();
+
+                if (type != NULL) {
+                    const char *needle;
+
+                    BTHWDBG("Looking for Samsung %s patchfile flavour in %s",
+                            type,
+                            dp->d_name);
+
+                    needle = strstr(dp->d_name, type);
+                    if (needle == NULL) {
+                        continue;
+                    }
+                }
+#endif
+
                 /* Check if it has .hcd extenstion */
                 filenamelen = strlen(dp->d_name);
                 if ((filenamelen >= FW_PATCHFILE_EXTENSION_LEN) &&
