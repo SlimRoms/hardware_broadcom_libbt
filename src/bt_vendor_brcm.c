@@ -149,6 +149,7 @@ static int op(bt_vendor_opcode_t opcode, void *param)
     switch(opcode)
     {
         case BT_VND_OP_POWER_CTRL:
+#ifndef BLUEDROID_ENABLE_V4L2
             {
                 int *state = (int *) param;
                 upio_set_bluetooth_power(UPIO_BT_POWER_OFF);
@@ -164,6 +165,7 @@ static int op(bt_vendor_opcode_t opcode, void *param)
                     hw_lpm_set_wake_state(false);
                 }
             }
+#endif
             break;
 
         case BT_VND_OP_FW_CFG:
