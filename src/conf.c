@@ -69,7 +69,11 @@ typedef struct {
  * Current supported entries and corresponding action functions
  */
 static const conf_entry_t conf_table[] = {
+#ifndef BLUEDROID_ENABLE_V4L2
     {"UartPort", userial_set_port, 0},
+#else
+    {"BtDrvDev", userial_set_port, 0},
+#endif
     {"FwPatchFilePath", hw_set_patch_file_path, 0},
     {"FwPatchFileName", hw_set_patch_file_name, 0},
     {"FwPrePatchFileName", hw_set_pre_patch_file_name, 0},
