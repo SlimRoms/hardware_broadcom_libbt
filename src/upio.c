@@ -502,7 +502,7 @@ void upio_set(uint8_t pio, uint8_t action, uint8_t polarity)
                 ALOGE("upio_set : write(%s) failed: %s (%d)",
                         VENDOR_BTWRITE_PROC_NODE, strerror(errno),errno);
             }
-#if (PROC_BTWRITE_TIMER_TIMEOUT_MS != 0)
+#if !defined(__aarch64__) && (PROC_BTWRITE_TIMER_TIMEOUT_MS != 0)
             else
             {
                 /* arm user space timer based on action */
