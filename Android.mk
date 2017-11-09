@@ -22,6 +22,7 @@ LOCAL_CFLAGS += \
         -Wall \
         -Werror \
         -Wno-switch \
+        -Wno-unused-function \
         -Wno-unused-parameter \
         -Wno-unused-variable \
 
