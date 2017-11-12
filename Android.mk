@@ -18,6 +18,14 @@ ifeq ($(strip $(USE_BLUETOOTH_BCM4343)),true)
 LOCAL_CFLAGS += -DUSE_BLUETOOTH_BCM4343
 endif
 
+LOCAL_CFLAGS += \
+        -Wall \
+        -Werror \
+        -Wno-switch \
+        -Wno-unused-function \
+        -Wno-unused-parameter \
+        -Wno-unused-variable \
+
 LOCAL_SRC_FILES := \
         src/bt_vendor_brcm.c \
         src/hardware.c \
