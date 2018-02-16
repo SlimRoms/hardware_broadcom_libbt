@@ -43,6 +43,8 @@ LOCAL_C_INCLUDES += \
 LOCAL_C_INCLUDES += $(bdroid_C_INCLUDES)
 LOCAL_CFLAGS += $(bdroid_CFLAGS)
 
+LOCAL_HEADER_LIBRARIES := libutils_headers
+
 ifneq ($(BOARD_HAVE_BLUETOOTH_BCM_A2DP_OFFLOAD),)
   LOCAL_STATIC_LIBRARIES := libbt-brcm_a2dp
 endif
