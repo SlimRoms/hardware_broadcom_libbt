@@ -561,7 +561,7 @@ static uint8_t hw_config_findpatch(char *p_chip_id_str)
                 {
                     /* Make sure it's not the prepatch */
                     prepatch_name = strrchr(fw_prepatch_name, '/');
-                    if(strcmp(++prepatch_name, dp->d_name))
+                    if(prepatch_name == NULL || strcmp(++prepatch_name, dp->d_name))
                     {
                         ALOGI("Found patchfile: %s/%s", \
                             fw_patchfile_path, dp->d_name);
