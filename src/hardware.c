@@ -466,8 +466,8 @@ static const char *hw_samsung_bluetooth_type()
     if (strncmp(buf, "murata", 6) == 0)
         return "murata";
 
-    if (strncmp(buf, "semcove", 7) == 0)
-        return "semcove";
+    if (strncmp(buf, "semco3rd", 8) == 0)
+        return "semco3rd";
 
     if (strncmp(buf, "semcosh", 7) == 0)
         return "semcosh";
